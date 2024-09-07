@@ -1,0 +1,41 @@
+(defwindow topbar
+    :stacking "fg"
+    :windowtype "dock"
+    :geometry (geometry :x "0%"
+                        :width "100%"
+                        :height "10px"
+                        :anchor "top center")
+    (bar)
+)
+
+
+(defwidget bar[]
+    (box :orientation "h"
+         :class "bar-box"
+    (workspaces)
+    (label :text "sample")
+    time
+    act-workspace
+    )
+)
+
+(defpoll act-workspace :interval "1ms"
+    "~/.config/eww/scripts/getworkspace.sh"
+  )
+
+(defwidget workspaces []
+  (box :class "workspaces"
+       :orientation "h"
+       :space-evenly true
+       :halign "start"
+       :spacing 10
+    (button :onclick "i3-msg workspace 1" 1)
+    (button :onclick "i3-msg workspace 2" 2)
+    (button :onclick "i3-msg workspace 3" 3)
+    (button :onclick "i3-msg workspace 4" 4)
+    (button :onclick "i3-msg workspace 5" 5)
+    (button :onclick "i3-msg workspace 6" 6)
+    (button :onclick "i3-msg workspace 7" 7)
+    (button :onclick "i3-msg workspace 8" 8)
+    (button :onclick "i3-msg workspace 9" 9)))
+

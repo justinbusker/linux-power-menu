@@ -1,0 +1,82 @@
+; Time variable
+(defpoll hour :interval "10s"
+    "date +%H")
+
+(defpoll time :interval "10s"
+  "date '+:%M %b %d, %Y'")
+
+(defpoll playing :interval ".1s"
+    "playerctl status"
+)
+
+(defpoll nowplaying-song :interval "1s"
+    "playerctl metadata title"
+)
+
+(defpoll nowplaying-artist :interval "1s"
+    "playerctl metadata artist"
+)
+
+; getting username from system
+(deflisten name :inital "name"
+    "echo $USER")
+
+;task variable to determine what the user selects
+(defvar task "")
+
+; layout for powermenu 
+(defwidget powermenu_layout []
+    (box :orientation "v"
+         :haligh "center"
+         :class "layout-box"
+    (intro)
+    (buttons :shutdown "${EWW_CMD} update task='poweroff'; ${EWW_CMD} open confirming" 
+
+     :reboot "${EWW_CMD} update task='reboot'; ${EWW_CMD} open confirming" 
+     :sleep  "${EWW_CMD} update task='systemctl suspend'; ${EWW_CMD} open confirming;"
+     :music "${EWW_CMD} open musicbox"
+    )
+))
+
+; Says hello and lists time vertically
+(defwidget intro []
+    (box :orientation "v"
+         :class "intro-box"
+    (label :text "Hello, ${name}")
+    (label :text "${hour > 12 ? hour - 12 : hour}${time}")
+))
+
+(defwidget confirmbox []
+    (box :orientation "v"
+         :class "conf-box"
+    (label :text "Are you sure?")
+    (confirm)
+))
+
+; confirm box for power buttons
+(defwidget confirm []
+    (box :orientation "h" :class "ex-check"
+        (button :onclick task "")
+        (button :onclick "  ${EWW_CMD} open powermenu; ${EWW_CMD} close confirming; ${EWW_CMD} update task=''" "")
+        ))
+
+
+; buttons for powermenu 
+(defwidget buttons [shutdown reboot sleep music]
+    (box :orientation "h" :class "btn-box"
+    (button :onclick shutdown "")
+    (button :onclick reboot "")
+    (button :onclick sleep "")
+    (button :onclick music "")
+    )
+)
+
+; musicplayer for spotify
+(defwidget musicplayer[]
+    (box :orientation "v"
+         :class "music-box"
+
+    (label :text "${playing} ${nowplaying-song} : ${nowplaying-artist}")
+    (button :onclick "playerctl play-pause" "${playing == "Playing" ? "" : ""}")
+         )
+)

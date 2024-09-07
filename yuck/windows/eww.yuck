@@ -1,0 +1,22 @@
+(include "~/.config/eww/yuck/widgets/powmenu.yuck")
+;powermenu window
+(defwindow powermenu
+    :stacking "fg"
+    :wm-ignore true
+    :windowtype "normal"
+    :geometry (geometry :height "25%"
+                        :width "25%"
+                        :anchor "center")
+    (powermenu_layout))
+
+; confirming window
+(defwindow confirming 
+    :stacking "fg"
+    :wm-ignore true
+    :windowtype "normal"
+    :geometry (geometry :height "25%"
+                        :width "25%"
+                        :anchor "center")
+    (confirmbox)
+)
+
